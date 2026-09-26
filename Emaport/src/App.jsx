@@ -1,194 +1,60 @@
 import { useEffect, useState } from 'react'
 
 const collections = ['All work', 'Portraits', 'Editorial', 'Stories']
-
 const work = [
-  { title: 'Untitled no. 08', category: 'Portraits', place: 'Lagos, 2025', image: '/images/portrait.jpg', tone: 'tall' },
-  { title: 'On the move', category: 'Editorial', place: 'Accra, 2025', image: '/images/movement.jpg', tone: 'wide' },
-  { title: 'Soft focus', category: 'Portraits', place: 'Cape Town, 2024', image: '/images/studio.jpg', tone: 'square' },
-  { title: 'In the city', category: 'Stories', place: 'Nairobi, 2024', image: '/images/city.jpg', tone: 'short' },
-  { title: 'After light', category: 'Editorial', place: 'Lagos, 2024', image: '/images/editorial.jpg', tone: 'tall' },
-  { title: 'Golden hours', category: 'Stories', place: 'Marrakech, 2024', image: '/images/golden-hour.jpg', tone: 'wide' },
+  { title: 'Untitled no. 08', category: 'Portraits', place: 'Lagos, 2025', image: '/images/portrait.jpg', grid: 'lg:col-span-7', height: 'h-[32rem] lg:h-[38.75rem]' },
+  { title: 'On the move', category: 'Editorial', place: 'Accra, 2025', image: '/images/movement.jpg', grid: 'lg:col-span-5', height: 'h-[16.25rem] lg:h-[25.625rem]' },
+  { title: 'Soft focus', category: 'Portraits', place: 'Cape Town, 2024', image: '/images/studio.jpg', grid: 'lg:col-span-5 lg:mt-18', height: 'h-[16.25rem] lg:h-[31.875rem]' },
+  { title: 'In the city', category: 'Stories', place: 'Nairobi, 2024', image: '/images/city.jpg', grid: 'lg:col-span-7', height: 'h-[19.375rem] lg:h-[24.375rem]' },
+  { title: 'After light', category: 'Editorial', place: 'Lagos, 2024', image: '/images/editorial.jpg', grid: 'lg:col-span-5', height: 'h-[16.25rem] lg:h-[38.75rem]' },
+  { title: 'Golden hours', category: 'Stories', place: 'Marrakech, 2024', image: '/images/golden-hour.jpg', grid: 'lg:col-span-5 lg:mt-18', height: 'h-[16.25rem] lg:h-[25.625rem]' },
+]
+const testimonials = [
+  { quote: 'Mara has a rare way of making a room fall away. The photographs feel like the version of ourselves we were hoping for, but completely honest.', name: 'Nora & Michael', detail: 'Private celebration, Amalfi' },
+  { quote: 'The entire process was quietly precise, generous, and full of beautiful surprises. Every frame feels considered without ever feeling staged.', name: 'Amina O.', detail: 'Founder portrait session, Lagos' },
+  { quote: 'Mara saw the atmosphere of the day before we had words for it. Our album feels less like documentation and more like a place we can return to.', name: 'Esi & Dara', detail: 'Destination wedding, Accra' },
 ]
 
-const testimonials = [
-  {
-    quote: 'Mara has a rare way of making a room fall away. The photographs feel like the version of ourselves we were hoping for, but completely honest.',
-    name: 'Nora & Michael',
-    detail: 'Private celebration, Amalfi',
-  },
-  {
-    quote: 'The entire process was quietly precise, generous, and full of beautiful surprises. Every frame feels considered without ever feeling staged.',
-    name: 'Amina O.',
-    detail: 'Founder portrait session, Lagos',
-  },
-  {
-    quote: 'Mara saw the atmosphere of the day before we had words for it. Our album feels less like documentation and more like a place we can return to.',
-    name: 'Esi & Dara',
-    detail: 'Destination wedding, Accra',
-  },
-]
+const shell = 'mx-auto w-[calc(100%-2.5rem)] max-w-[1180px] md:w-[calc(100%-4rem)]'
+const Eyebrow = ({ children, light = false }) => <p className={`font-mono text-[10px] font-medium uppercase tracking-[.08em] ${light ? 'text-[#e0e6d5]' : 'text-[#667680]'}`}>{children}</p>
+const TextLink = ({ href, children }) => <a href={href} className="inline-block border-b border-current pb-1.5 text-[13px] transition-colors hover:border-clay hover:text-clay">{children}</a>
 
 function App() {
   const [activeCollection, setActiveCollection] = useState('All work')
   const [testimonialIndex, setTestimonialIndex] = useState(0)
-
   useEffect(() => {
-    const elements = document.querySelectorAll('[data-reveal]')
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.14 },
-    )
-
-    elements.forEach((element) => observer.observe(element))
+    const els = document.querySelectorAll('[data-reveal]')
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.remove('translate-y-7', 'opacity-0'); observer.unobserve(entry.target) }
+    }), { threshold: 0.12 })
+    els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
-
-  const visibleWork = activeCollection === 'All work'
-    ? work
-    : work.filter((piece) => piece.category === activeCollection)
+  const visibleWork = activeCollection === 'All work' ? work : work.filter((piece) => piece.category === activeCollection)
   const testimonial = testimonials[testimonialIndex]
 
-  const changeTestimonial = (direction) => {
-    setTestimonialIndex((current) => (current + direction + testimonials.length) % testimonials.length)
-  }
+  return <main>
+    <section id="home" className="relative isolate h-[100svh] min-h-[640px] overflow-hidden bg-[#e8eff1]">
+      <div className="absolute inset-y-0 right-0 w-full bg-[url('/images/Emacyber2.jpeg')] bg-[length:auto_78%] bg-[position:72%_100%] bg-no-repeat sm:bg-[length:auto_88%] sm:bg-[position:80%_100%] lg:w-[64%] lg:bg-[length:auto_94%] lg:bg-[position:60%_100%]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#e8eff1] via-[#e8eff1]/70 to-transparent lg:via-[#e8eff1]/15" />
+      <nav className={`relative z-10 flex items-center justify-between pt-6 md:pt-7 ${shell}`} aria-label="Primary navigation"><a className="inline-flex flex-col font-semibold leading-[.78] tracking-[.05em]" href="#home">Ben<span className="text-[10px] font-normal tracking-[.19em]">Walker</span></a><div className="ml-24 hidden gap-8 text-[13px] md:flex"><a href="#work">Work</a><a href="#about">About</a><a href="#journal">Journal</a></div><a className="border-b border-ink pb-1 text-[12px] md:text-[13px]" href="#contact">Let's talk <span className="ml-2">↗</span></a></nav>
+      <div className={`absolute top-28 left-1/2 z-10 w-[calc(100%-2.5rem)] -translate-x-1/2 md:top-1/2 md:w-[calc(100%-4rem)] md:max-w-[1180px] md:-translate-y-[34%] ${shell}`}><Eyebrow>Ben Walker / photographer</Eyebrow><h1 className="my-4 font-serif text-[clamp(3.4rem,8vw,7.25rem)] leading-[.87] font-medium tracking-tight md:my-5">Making room<br />for the real.</h1><div className="flex max-w-[730px] flex-col gap-5 md:flex-row md:items-end md:justify-between"><p className="w-[255px] text-[13px] leading-relaxed md:text-[14px]">Portraits, celebrations, and quiet stories for people who want to remember how it felt.</p><TextLink href="#work">Explore selected work <span className="ml-2 text-base">↓</span></TextLink></div></div>
+      <p className="absolute right-5 bottom-6 z-10 text-right font-mono text-[10px] leading-relaxed tracking-[.06em] uppercase text-[#546570] md:right-10 md:bottom-7">Based in Uyo<br />Available anywhere</p>
+    </section>
 
-  return (
-    <main>
-      <section className="hero" id="home">
-        <nav className="nav shell" aria-label="Primary navigation">
-          <a className="wordmark" href="#home" aria-label="Ben Walker home">Ben<span>Walker</span></a>
-          <div className="nav-links">
-            <a href="#work">Work</a>
-            <a href="#about">About</a>
-            <a href="#journal">Journal</a>
-          </div>
-          <a className="nav-contact" href="#contact">Let's talk <span aria-hidden="true">&#8599;</span></a>
-        </nav>
+    <section id="about" data-reveal className={`${shell} translate-y-7 py-23 opacity-0 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 md:py-38`}><Eyebrow>01 / A little introduction</Eyebrow><div className="mt-8 grid items-end gap-8 md:grid-cols-[1.2fr_.8fr] md:gap-17"><h2 className="font-serif text-[clamp(2.65rem,5vw,4.75rem)] leading-[.98] font-medium">There is beauty in the<br className="hidden md:block" /> <em className="text-clay">in-between.</em></h2><div className="max-w-[370px]"><p className="mb-7 text-[15px] leading-relaxed md:mb-9 md:text-base">I am Ben, a Uyo-based photographer drawn to honest gestures, imperfect light, and the pulse of people together. My work lives somewhere between observation and feeling.</p><TextLink href="#contact">More about my approach <span className="ml-2">↗</span></TextLink></div></div><div className="ml-auto mt-18 grid w-[86%] gap-3 md:mt-29 md:w-[79%] md:grid-cols-[1.05fr_.95fr] md:items-end md:gap-6"><img className="h-[360px] w-full object-cover md:h-[430px]" src="/images/golden-hour.jpg" alt="Warm outdoor portrait in evening light" /><p className="max-w-48 font-mono text-[11px] leading-relaxed text-[#63736d] md:mb-2">Photographing people and places since 2021.</p></div></section>
 
-        <div className="hero-copy shell">
-          <p className="eyebrow light">Ben Walker / photographer</p>
-          <h1>Making room<br />for the real.</h1>
-          <div className="hero-bottom">
-            <p>Portraits, celebrations, and quiet stories for people who want to remember how it felt.</p>
-            <a className="text-link light" href="#work">Explore selected work <span aria-hidden="true">&#8595;</span></a>
-          </div>
-        </div>
-        <p className="hero-location">Based in Uyo<br />Available anywhere</p>
-      </section>
+    <section id="work" data-reveal className="translate-y-7 bg-[#dce7eb] py-21 opacity-0 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 md:py-30"><div className={`${shell} flex flex-col gap-8 md:flex-row md:items-end md:justify-between`}><div><Eyebrow>02 / Selected work</Eyebrow><h2 className="mt-6 font-serif text-[clamp(2.65rem,5vw,4.75rem)] leading-[.98] font-medium">Stories worth<br />holding onto.</h2></div><div className="flex flex-wrap gap-1">{collections.map((collection) => <button className={`cursor-pointer border px-3 py-2 text-xs ${activeCollection === collection ? 'border-ink text-ink' : 'border-transparent text-[#65726e]'}`} key={collection} onClick={() => setActiveCollection(collection)} type="button">{collection}</button>)}</div></div><div className={`${shell} mt-11 grid grid-cols-2 gap-x-3 gap-y-9 md:mt-19 md:grid-cols-12 md:gap-x-5 md:gap-y-16`}>{visibleWork.map((piece) => <article className={`${piece.grid} group`} key={piece.title}><div className={`relative overflow-hidden bg-[#b9c7cc] ${piece.height}`}><img className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src={piece.image} alt={`${piece.title} photography`} /><span className="absolute top-4 right-4 grid h-9 w-9 place-items-center rounded-full bg-paper opacity-0 transition-opacity group-hover:opacity-100">↗</span></div><div className="pt-2 md:flex md:justify-between md:gap-4 md:pt-3"><h3 className="font-serif text-sm font-medium md:text-base">{piece.title}</h3><p className="mt-1 font-mono text-[8px] text-[#65726e] md:mt-0 md:text-right md:text-[10px]">{piece.category} / {piece.place}</p></div></article>)}</div><div className={`${shell} mt-14 text-center md:mt-20`}><TextLink href="#contact">View the full archive <span className="ml-2">↗</span></TextLink></div></section>
 
-      <section className="intro shell" id="about" data-reveal>
-        <p className="eyebrow">01 / A little introduction</p>
-        <div className="intro-grid">
-          <h2>There is beauty in the<br /><em>in-between.</em></h2>
-          <div className="intro-copy">
-            <p>I am Ben, a Uyo-based photographer drawn to honest gestures, imperfect light, and the pulse of people together. My work lives somewhere between observation and feeling.</p>
-            <a className="text-link" href="#contact">More about my approach <span aria-hidden="true">&#8599;</span></a>
-          </div>
-        </div>
-        <div className="intro-image-wrap">
-          <img src="/images/golden-hour.jpg" alt="Warm outdoor portrait in evening light" />
-          <p>Photographing people and places since 2021.</p>
-        </div>
-      </section>
+    <section data-reveal className={`${shell} translate-y-7 py-23 opacity-0 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 md:py-36`}><Eyebrow>03 / Ways to work together</Eyebrow><div className="mt-7 grid gap-11 md:mt-9 md:grid-cols-2 md:gap-30"><h2 className="max-w-[520px] font-serif text-[clamp(2.65rem,5vw,4.75rem)] leading-[.98] font-medium">For the moments that ask to be <em className="text-clay">felt again.</em></h2><div className="border-t border-[#b8c0ba]">{[['01', 'Portraiture', 'Editorial portraits with warmth, character, and a little breathing room.'], ['02', 'Weddings & celebrations', 'Unscripted coverage of big days and all the smaller moments inside them.'], ['03', 'Brand stories', 'Images for considered brands, creative people, and places with a point of view.']].map(([number, title, text]) => <article className="grid grid-cols-[48px_1fr] gap-3 border-b border-[#b8c0ba] py-5.5" key={number}><span className="font-mono text-[10px] text-clay">{number}</span><div><h3 className="mb-2 font-serif text-xl leading-tight font-medium md:text-[22px]">{title}</h3><p className="max-w-[300px] text-[13px] leading-relaxed text-[#63736d]">{text}</p></div></article>)}</div></div></section>
 
-      <section className="work-section" id="work" data-reveal>
-        <div className="shell work-heading">
-          <div>
-            <p className="eyebrow">02 / Selected work</p>
-            <h2>Stories worth<br />holding onto.</h2>
-          </div>
-          <div className="collection-switch" aria-label="Filter gallery">
-            {collections.map((collection) => (
-              <button
-                className={activeCollection === collection ? 'active' : ''}
-                key={collection}
-                onClick={() => setActiveCollection(collection)}
-                type="button"
-              >
-                {collection}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="gallery shell">
-          {visibleWork.map((piece) => (
-            <article className={`work-card ${piece.tone}`} key={piece.title}>
-              <div className="work-image">
-                <img src={piece.image} alt={`${piece.title} photography`} />
-                <span className="view-mark" aria-hidden="true">&#8599;</span>
-              </div>
-              <div className="work-meta">
-                <h3>{piece.title}</h3>
-                <p>{piece.category} / {piece.place}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="shell archive-link"><a className="text-link" href="#contact">View the full archive <span aria-hidden="true">&#8599;</span></a></div>
-      </section>
+    <section data-reveal className="translate-y-7 bg-[#b94737] text-[#fbf4ea] opacity-0 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100"><div className={`${shell} grid min-h-[660px] md:grid-cols-[.95fr_1.05fr]`}><div className="min-h-[390px] md:min-h-[620px]"><img className="h-full w-full object-cover saturate-75" src="/images/editorial.jpg" alt="Editorial portrait in a field" /></div><div className="flex min-h-[480px] flex-col py-15 md:py-23 md:pl-20 md:pb-16"><Eyebrow light>04 / Kind words</Eyebrow><blockquote className="my-auto max-w-[560px] font-serif text-[clamp(1.9rem,3.5vw,3.2rem)] leading-[1.1] font-medium">“{testimonial.quote}”</blockquote><div className="flex items-end justify-between gap-6"><p className="font-mono text-[11px] leading-relaxed text-[#f8dfcf]"><strong className="font-medium text-[#fff8f0]">{testimonial.name}</strong><br />{testimonial.detail}</p><div className="flex items-center gap-3"><button className="h-9 w-9 cursor-pointer rounded-full border border-white/65 transition hover:bg-[#fff8f0] hover:text-[#b94737]" type="button" onClick={() => setTestimonialIndex((i) => (i + 2) % 3)} aria-label="Previous testimonial">←</button><span className="hidden whitespace-nowrap font-mono text-[10px] sm:inline">{String(testimonialIndex + 1).padStart(2, '0')} / 03</span><button className="h-9 w-9 cursor-pointer rounded-full border border-white/65 transition hover:bg-[#fff8f0] hover:text-[#b94737]" type="button" onClick={() => setTestimonialIndex((i) => (i + 1) % 3)} aria-label="Next testimonial">→</button></div></div></div></div></section>
 
-      <section className="services shell" data-reveal>
-        <p className="eyebrow">03 / Ways to work together</p>
-        <div className="services-grid">
-          <h2>For the moments that ask to be <em>felt again.</em></h2>
-          <div className="service-list">
-            <article><span>01</span><div><h3>Portraiture</h3><p>Editorial portraits with warmth, character, and a little breathing room.</p></div></article>
-            <article><span>02</span><div><h3>Weddings & celebrations</h3><p>Unscripted coverage of big days and all the smaller moments inside them.</p></div></article>
-            <article><span>03</span><div><h3>Brand stories</h3><p>Images for considered brands, creative people, and places with a point of view.</p></div></article>
-          </div>
-        </div>
-      </section>
+    <section id="journal" data-reveal className={`${shell} translate-y-7 py-22 opacity-0 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100 md:py-34`}><div className="mb-10 flex items-center justify-between md:mb-15"><Eyebrow>05 / From the journal</Eyebrow><TextLink href="#contact">All field notes <span className="ml-2">↗</span></TextLink></div><div className="grid md:grid-cols-3">{[['Notes from Lagos / 2025', 'The colour of home, in all its forms.'], ['Travel / 2025', 'A long weekend on the Atlantic coast.'], ['Process / 2024', 'Why I will always leave room for the unexpected.']].map(([meta, title]) => <article className="flex min-h-46 flex-col border-y border-[#afbbb4] py-4.5 md:min-h-65 md:border-r md:px-6 first:md:pl-0 last:md:border-r-0" key={title}><p className="font-mono text-[10px] text-[#63736d]">{meta}</p><h3 className="my-auto max-w-[280px] font-serif text-[26px] leading-[1.07] font-medium md:text-[28px]">{title}</h3><a href="#contact" className="text-xs">Read story <span className="ml-1.5">↗</span></a></article>)}</div></section>
 
-      <section className="testimonial-section" data-reveal>
-        <div className="shell testimonial-layout">
-          <div className="testimonial-photo"><img src="/images/editorial.jpg" alt="Editorial portrait in a field" /></div>
-          <div className="testimonial-content">
-            <p className="eyebrow">04 / Kind words</p>
-            <blockquote>“{testimonial.quote}”</blockquote>
-            <div className="testimonial-footer">
-              <p><strong>{testimonial.name}</strong><br />{testimonial.detail}</p>
-              <div className="slider-actions">
-                <button type="button" onClick={() => changeTestimonial(-1)} aria-label="Previous testimonial">&#8592;</button>
-                <span>{String(testimonialIndex + 1).padStart(2, '0')} / {String(testimonials.length).padStart(2, '0')}</span>
-                <button type="button" onClick={() => changeTestimonial(1)} aria-label="Next testimonial">&#8594;</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="journal shell" id="journal" data-reveal>
-        <div className="journal-top"><p className="eyebrow">05 / From the journal</p><a className="text-link" href="#contact">All field notes <span aria-hidden="true">&#8599;</span></a></div>
-        <div className="journal-grid">
-          <article><p>Notes from Lagos / 2025</p><h3>The colour of home, in all its forms.</h3><a href="#contact" aria-label="Read The colour of home, in all its forms">Read story <span aria-hidden="true">&#8599;</span></a></article>
-          <article><p>Travel / 2025</p><h3>A long weekend on the Atlantic coast.</h3><a href="#contact" aria-label="Read A long weekend on the Atlantic coast">Read story <span aria-hidden="true">&#8599;</span></a></article>
-          <article><p>Process / 2024</p><h3>Why I will always leave room for the unexpected.</h3><a href="#contact" aria-label="Read Why I will always leave room for the unexpected">Read story <span aria-hidden="true">&#8599;</span></a></article>
-        </div>
-      </section>
-
-      <section className="contact" id="contact" data-reveal>
-        <div className="shell contact-inner">
-          <p className="eyebrow light">06 / Enquiries & collaborations</p>
-          <h2>Let's make<br /><em>something true.</em></h2>
-          <a className="contact-email" href="mailto:hello@maranolan.studio">hello@maranolan.studio <span aria-hidden="true">&#8599;</span></a>
-        </div>
-      </section>
-
-      <footer className="footer shell">
-        <a className="wordmark dark" href="#home">BEN<span>WALKER</span></a>
-        <p>© {new Date().getFullYear()} Ben Walker Studios</p>
-        <div><a href="#home">Instagram</a><a href="#home">Pinterest</a></div>
-      </footer>
-    </main>
-  )
+    <section id="contact" data-reveal className="translate-y-7 bg-[#1b2a34] text-[#f5f2eb] opacity-0 transition-all duration-700 motion-reduce:translate-y-0 motion-reduce:opacity-100"><div className={`${shell} py-22 md:py-31`}><Eyebrow light>06 / Enquiries & collaborations</Eyebrow><h2 className="my-7 font-serif text-[clamp(2.65rem,5vw,4.75rem)] leading-[.98] font-medium md:my-8">Let's make<br /><em className="text-[#e98b76]">something true.</em></h2><a className="inline-block border-b border-[#dce1d5] pb-2 text-[15px]" href="mailto:hello@maranolan.studio">hello@maranolan.studio <span className="ml-2">↗</span></a></div></section>
+    <footer className={`${shell} flex items-end justify-between py-6 md:items-center md:py-7`}><a className="inline-flex flex-col font-semibold leading-[.78] tracking-[.05em]" href="#home">BEN<span className="text-[10px] font-normal tracking-[.19em]">WALKER</span></a><p className="hidden font-mono text-[10px] text-[#6c7973] md:block">© {new Date().getFullYear()} Ben Walker Studios</p><div className="flex gap-4 font-mono text-[10px] text-[#6c7973]"><a href="#home">Instagram</a><a href="#home">Pinterest</a></div></footer>
+  </main>
 }
 
 export default App
